@@ -6,4 +6,4 @@ const BUSINESS_NAME = 'bestfriends'
 // Success URL is configured INSIDE Stripe dashboard
 
 const PAYMENT_LINK =
-  'https://buy.stripe.com/dRmeVd9Rg4mVdNU0WygUM0c'
+  'https://buy.stripe.com/test_00w3cvgfE06F5ho6gSgUM00'
