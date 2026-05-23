@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- 🔥 UTF-8 FIX -->
+    <meta charset="UTF-8" />
+
     <script src="config.js"></script>
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
+
+    <!-- 🔥 CACHE FIX -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-store, no-cache, must-revalidate, max-age=0"
+    />
+
+    <meta http-equiv="Pragma" content="no-cache" />
+
+    <meta http-equiv="Expires" content="0" />
 
     <title>Photo Booth Homepage</title>
 
@@ -13,16 +27,21 @@
       body {
         margin: 0;
         background: black;
-        font-family: Arial;
+        font-family: Arial, sans-serif;
         overflow: hidden;
         height: 100vh;
         color: white;
+
+        /* 🔥 IOS FONT FIX */
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
 
       .screen {
         position: absolute;
         width: 100vw;
         height: 100vh;
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -39,12 +58,16 @@
         margin-bottom: -95px;
       }
 
+      /* TAKE PHOTO BUTTON */
       #takePhoto {
         background: none;
         border: none;
         cursor: pointer;
+
         transition: transform 0.1s ease, filter 0.1s ease;
+
         animation: glowPulse 2s infinite;
+
         outline: none;
         -webkit-tap-highlight-color: transparent;
       }
@@ -55,24 +78,29 @@
         pointer-events: none;
       }
 
+      /* PRESS EFFECT */
       #takePhoto:active {
         transform: scale(0.9) translateY(4px);
         filter: brightness(0.8);
         animation: none;
       }
 
+      /* GLOW ANIMATION */
       @keyframes glowPulse {
         0% {
           transform: scale(1);
         }
+
         50% {
           transform: scale(1.04);
         }
+
         100% {
           transform: scale(1);
         }
       }
 
+      /* RELEASE BOUNCE */
       #takePhoto.released {
         animation: bounce 0.18s ease;
       }
@@ -81,9 +109,11 @@
         0% {
           transform: scale(0.9);
         }
+
         50% {
           transform: scale(1.06);
         }
+
         100% {
           transform: scale(1);
         }
@@ -93,8 +123,10 @@
 
   <body>
     <div class="screen">
+      <!-- LOGO -->
       <img id="logo2" src="images/dpblogo.png" />
 
+      <!-- TAKE PHOTO BUTTON -->
       <button id="takePhoto">
         <img src="images/takephoto.png" />
       </button>
@@ -103,21 +135,31 @@
     <script>
       const btn = document.getElementById('takePhoto')
 
-      // 🔥 YOUR STRIPE PAYMENT LINK
+      // 🔥 STRIPE PAYMENT LINK
       const PAYMENT_LINK = 'https://buy.stripe.com/test_00w3cvgfE06F5ho6gSgUM00'
 
+      /* MOBILE TAP RELEASE EFFECT */
       btn.addEventListener('touchend', () => {
         btn.classList.add('released')
-        setTimeout(() => btn.classList.remove('released'), 180)
+
+        setTimeout(() => {
+          btn.classList.remove('released')
+        }, 180)
       })
 
+      /* DESKTOP CLICK RELEASE EFFECT */
       btn.addEventListener('mouseup', () => {
         btn.classList.add('released')
-        setTimeout(() => btn.classList.remove('released'), 180)
+
+        setTimeout(() => {
+          btn.classList.remove('released')
+        }, 180)
       })
 
+      /* 🔥 STRIPE REDIRECT FIX */
       btn.addEventListener('click', () => {
-        // 🔥 Redirect directly to Stripe Payment Link
+        sessionStorage.setItem('stripeRedirect', 'true')
+
         window.location.href = PAYMENT_LINK
       })
     </script>
