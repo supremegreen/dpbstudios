@@ -216,11 +216,8 @@
           /* 🔥 UNIQUE FILE NAME */
           const fileName = `photo_${Date.now()}.png`
 
-          /* 🔥 SAVE TO CORRECT FIREBASE FOLDER */
-          const storageRef = ref(
-            storage,
-            `texasroadhousemacon/livewall/${fileName}`
-          )
+          /* 🔥 SPARKS FIREBASE FOLDER */
+          const storageRef = ref(storage, `sparks/livewall/${fileName}`)
 
           /* 🔥 WAIT FOR UPLOAD */
           await uploadBytes(storageRef, blob)

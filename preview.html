@@ -111,9 +111,6 @@
 
       const storage = getStorage(app)
 
-      /* 🔥 AUTO DETECT BUSINESS FOLDER */
-      const BUSINESS_NAME = window.location.pathname.split('/')[1]
-
       const baseImage = new Image()
 
       let ready = false
@@ -127,8 +124,9 @@
       }
 
       const filters = [
-        'images/school.png',
-        'images/besties.png',
+        './images/photo2.png',
+        './images/photo4.png',
+        './images/photo6.png'
       ]
 
       let index = 0
@@ -149,8 +147,6 @@
 
       window.onload = draw
 
-      /* 🔥 FIXED SWIPE FILTER CHANGING */
-
       let startX = 0
 
       preview.addEventListener('touchstart', e => {
@@ -162,7 +158,6 @@
 
         const diff = startX - endX
 
-        // Swipe Left
         if (diff > 50) {
           index++
 
@@ -173,7 +168,6 @@
           draw()
         }
 
-        // Swipe Right
         if (diff < -50) {
           index--
 
@@ -215,35 +209,33 @@
             canvas.toBlob(resolve, 'image/png')
           )
 
-          /* 🔥 UNIQUE FILE NAME */
           const fileName = `photo_${Date.now()}.png`
 
-          /* 🔥 UNIVERSAL FIREBASE PATH */
           const storageRef = ref(
             storage,
-            `${BUSINESS_NAME}/livewall/${fileName}`
+            `texasroadhousemacon/livewall/${fileName}`
           )
 
-          /* 🔥 AUTO CREATES FOLDER */
           await uploadBytes(storageRef, blob)
 
-          // Download
-          const a = document.createElement('a')
+          /* 🔥 MOBILE SAFE SAVE */
+          const imageURL = canvas.toDataURL('image/png')
 
-          a.href = URL.createObjectURL(blob)
+          const link = document.createElement('a')
 
-          a.download = fileName
+          link.href = imageURL
+          link.download = fileName
 
-          document.body.appendChild(a)
+          document.body.appendChild(link)
 
-          a.click()
+          link.click()
 
-          document.body.removeChild(a)
+          document.body.removeChild(link)
 
-          // Redirect
-          requestAnimationFrame(() => {
+          /* 🔥 SLIGHT DELAY FOR MOBILE SAVE */
+          setTimeout(() => {
             location.replace('index.html')
-          })
+          }, 1500)
         } catch (error) {
           console.error('Upload failed:', error)
 

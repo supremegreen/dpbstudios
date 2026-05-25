@@ -52,7 +52,7 @@
         color: white;
         font-size: 34px;
         font-weight: bold;
-        margin-bottom: 40px;
+        margin-bottom: 35px;
         text-align: center;
 
         animation: fadeGlow 2s infinite alternate;
@@ -72,28 +72,41 @@
       #startBtn {
         background: none;
         border: none;
-        padding: 0;
         cursor: pointer;
 
-        animation: pulse 2s infinite;
+        transition: transform 0.1s ease, filter 0.1s ease;
 
-        transition: transform 0.12s ease;
+        animation: glowPulse 2s infinite;
+
+        outline: none;
+
+        -webkit-tap-highlight-color: transparent;
+
+        padding: 0;
       }
 
+      /* 🔥 BUTTON SIZE ADJUST HERE */
       #startBtn img {
-        width: 320px;
-        max-width: 85vw;
+        width: 190px;
+        max-width: 70vw;
+
+        display: block;
+
         pointer-events: none;
         user-select: none;
       }
 
-      /* BUTTON PRESS */
+      /* REAL BUTTON PRESS */
       #startBtn:active {
-        transform: scale(0.92);
+        transform: scale(0.9) translateY(4px);
+
+        filter: brightness(0.8);
+
+        animation: none;
       }
 
-      /* GLOW PULSE */
-      @keyframes pulse {
+      /* PULSE ANIMATION */
+      @keyframes glowPulse {
         0% {
           transform: scale(1);
         }
@@ -107,7 +120,26 @@
         }
       }
 
-      /* OPTIONAL LOADING TEXT */
+      /* RELEASE BOUNCE */
+      #startBtn.released {
+        animation: bounce 0.18s ease;
+      }
+
+      @keyframes bounce {
+        0% {
+          transform: scale(0.9);
+        }
+
+        50% {
+          transform: scale(1.06);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* LOADING TEXT */
       #loadingText {
         color: #aaa;
         margin-top: 20px;
@@ -124,7 +156,6 @@
 
       <!-- START BUTTON -->
       <button id="startBtn">
-        <!-- USE SAME IMAGE -->
         <img src="images/start.png" alt="Start" />
       </button>
 
@@ -136,6 +167,28 @@
       const startBtn = document.getElementById('startBtn')
       const loadingText = document.getElementById('loadingText')
 
+      /*
+        BOUNCE RELEASE EFFECT
+      */
+      startBtn.addEventListener('touchend', () => {
+        startBtn.classList.remove('released')
+
+        void startBtn.offsetWidth
+
+        startBtn.classList.add('released')
+      })
+
+      startBtn.addEventListener('mouseup', () => {
+        startBtn.classList.remove('released')
+
+        void startBtn.offsetWidth
+
+        startBtn.classList.add('released')
+      })
+
+      /*
+        BUTTON CLICK
+      */
       startBtn.addEventListener('click', () => {
         /*
           PREVENT DOUBLE TAPS
