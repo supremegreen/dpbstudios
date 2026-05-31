@@ -83,7 +83,7 @@
         flex-direction: column;
         align-items: center;
 
-        animation: scrollVertical 70s linear infinite;
+        animation: scrollVertical 150s linear infinite;
       }
 
       .mediaItem {
@@ -158,8 +158,8 @@
 
       const storage = getStorage(app)
 
-      /* 🔥 AUTO DETECT BUSINESS FOLDER */
-      const BUSINESS_NAME = window.location.pathname.split('/')[1]
+      /* 🔥 CHANGE THIS FOR EACH BUSINESS */
+      const LIVEWALL_FOLDER = 'recess/livewall'
 
       const container = document.getElementById('mediaContainer')
 
@@ -188,7 +188,7 @@
       async function loadMedia() {
         try {
           /* 🔥 CORRECT BUSINESS FOLDER */
-          const listRef = ref(storage, `${BUSINESS_NAME}/livewall/`)
+          const listRef = ref(storage, LIVEWALL_FOLDER)
 
           const res = await listAll(listRef)
 
