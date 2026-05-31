@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html>
   <head>
@@ -22,9 +23,12 @@
       video,
       canvas {
         position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transform-origin: center center;
       }
 
       #captureBtn {
@@ -44,6 +48,21 @@
         position: absolute;
         top: 20px;
         right: 20px;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        user-select: none;
+      }
+
+      #flashBtn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
         width: 55px;
         height: 55px;
         border-radius: 50%;
@@ -76,7 +95,6 @@
         right: 20px;
       }
 
-      /* 🔥 SVG ICON SIZE */
       .iconSvg {
         width: 32px;
         height: 32px;
@@ -90,6 +108,22 @@
     <canvas id="previewCanvas" style="display: none"></canvas>
 
     <button id="captureBtn"></button>
+
+    <!-- ⚡ FLASH BUTTON -->
+    <div id="flashBtn">
+      <svg
+        class="iconSvg"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#FFD600"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon points="13 2 3 14 11 14 9 22 21 9 13 9"></polygon>
+      </svg>
+    </div>
 
     <!-- 🔄 BLUE FLIP CAMERA SVG -->
     <div id="flipBtn">
@@ -147,6 +181,7 @@
       let stream
       let currentFacingMode = 'environment'
       let photoBlob
+      let flashEnabled = false
 
       const video = document.getElementById('video')
       const canvas = document.getElementById('previewCanvas')
@@ -154,27 +189,26 @@
 
       const captureBtn = document.getElementById('captureBtn')
       const flipBtn = document.getElementById('flipBtn')
+      const flashBtn = document.getElementById('flashBtn')
       const retakeBtn = document.getElementById('retake')
       const approveBtn = document.getElementById('approve')
 
-      /* START CAMERA */
       async function startCamera() {
         if (stream) {
           stream.getTracks().forEach(track => track.stop())
         }
 
+        flashEnabled = false
+
         stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: { ideal: currentFacingMode },
 
-            /* 🔥 QUALITY BOOST */
             width: { ideal: 1920 },
             height: { ideal: 1080 },
 
-            /* 🔥 BETTER CAMERA SELECTION */
             aspectRatio: { ideal: 16 / 9 },
 
-            /* 🔥 ADVANCED SETTINGS */
             focusMode: 'continuous',
             exposureMode: 'continuous',
             whiteBalanceMode: 'continuous'
@@ -182,6 +216,8 @@
         })
 
         video.srcObject = stream
+        await video.play()
+        ;(video.style.left = '0'), (video.style.top = '0')
 
         if (currentFacingMode === 'user') {
           video.style.transform = 'scaleX(-1)'
@@ -190,9 +226,27 @@
         }
       }
 
+      async function toggleFlash() {
+        if (!stream) return
+
+        const track = stream.getVideoTracks()[0]
+
+        const capabilities = track.getCapabilities()
+
+        if (!capabilities.torch) {
+          alert('Flash not supported on this device')
+          return
+        }
+
+        flashEnabled = !flashEnabled
+
+        await track.applyConstraints({
+          advanced: [{ torch: flashEnabled }]
+        })
+      }
+
       window.onload = startCamera
 
-      /* FLIP CAMERA */
       flipBtn.onclick = () => {
         currentFacingMode =
           currentFacingMode === 'user' ? 'environment' : 'user'
@@ -200,7 +254,10 @@
         startCamera()
       }
 
-      /* CAPTURE PHOTO */
+      flashBtn.onclick = () => {
+        toggleFlash()
+      }
+
       captureBtn.onclick = () => {
         canvas.width = video.videoWidth
         canvas.height = video.videoHeight
@@ -223,6 +280,7 @@
 
             captureBtn.style.display = 'none'
             flipBtn.style.display = 'none'
+            flashBtn.style.display = 'none'
 
             retakeBtn.style.display = 'flex'
             approveBtn.style.display = 'flex'
@@ -232,19 +290,18 @@
         )
       }
 
-      /* RETAKE */
       retakeBtn.onclick = () => {
         video.style.display = 'block'
         canvas.style.display = 'none'
 
         captureBtn.style.display = 'block'
         flipBtn.style.display = 'flex'
+        flashBtn.style.display = 'flex'
 
         retakeBtn.style.display = 'none'
         approveBtn.style.display = 'none'
       }
 
-      /* APPROVE */
       approveBtn.onclick = () => {
         const reader = new FileReader()
 
@@ -259,3 +316,4 @@
     </script>
   </body>
 </html>
+```

@@ -123,11 +123,7 @@
         baseImage.onload = () => (ready = true)
       }
 
-      const filters = [
-        './images/photo2.png',
-        './images/photo4.png',
-        './images/photo6.png'
-      ]
+      const filters = ['./images/besties.png', './images/school.png']
 
       let index = 0
 
@@ -147,8 +143,6 @@
 
       window.onload = draw
 
-      /* 🔥 FIXED SWIPE FILTER CHANGING */
-
       let startX = 0
 
       preview.addEventListener('touchstart', e => {
@@ -160,7 +154,6 @@
 
         const diff = startX - endX
 
-        // Swipe Left
         if (diff > 50) {
           index++
 
@@ -171,7 +164,6 @@
           draw()
         }
 
-        // Swipe Right
         if (diff < -50) {
           index--
 
@@ -213,35 +205,33 @@
             canvas.toBlob(resolve, 'image/png')
           )
 
-          /* 🔥 UNIQUE FILE NAME */
           const fileName = `photo_${Date.now()}.png`
 
-          /* 🔥 SAVE TO CORRECT FIREBASE FOLDER */
           const storageRef = ref(
             storage,
             `brassrack/livewall/${fileName}`
           )
 
-          /* 🔥 WAIT FOR UPLOAD */
           await uploadBytes(storageRef, blob)
 
-          // Download
-          const a = document.createElement('a')
+          /* 🔥 MOBILE SAFE SAVE */
+          const imageURL = canvas.toDataURL('image/png')
 
-          a.href = URL.createObjectURL(blob)
+          const link = document.createElement('a')
 
-          a.download = fileName
+          link.href = imageURL
+          link.download = fileName
 
-          document.body.appendChild(a)
+          document.body.appendChild(link)
 
-          a.click()
+          link.click()
 
-          document.body.removeChild(a)
+          document.body.removeChild(link)
 
-          // 🔥 PERFECT REDIRECT TIMING
-          requestAnimationFrame(() => {
+          /* 🔥 SLIGHT DELAY FOR MOBILE SAVE */
+          setTimeout(() => {
             location.replace('index.html')
-          })
+          }, 4000)
         } catch (error) {
           console.error('Upload failed:', error)
 
