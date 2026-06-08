@@ -83,7 +83,7 @@
         flex-direction: column;
         align-items: center;
 
-        animation: scrollVertical 150s linear infinite;
+        animation: scrollVertical 320s linear infinite;
       }
 
       .mediaItem {
@@ -107,6 +107,18 @@
           transform: translateY(-100%);
         }
       }
+      #clock {
+        position: fixed;
+        top: 2px;
+        right: 4px;
+        z-index: 999999;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.1);
+        font-family: Arial, Helvetica, sans-serif;
+        user-select: none;
+        pointer-events: none;
+        background: transparent;
+      }
     </style>
   </head>
 
@@ -116,8 +128,7 @@
       <div class="adStack" id="leftAds">
         <img class="promoImg active" src="images/ad1.png" />
 
-        <img class="promoImg" src="images/photo4.png" />
-        <img class="promoImg" src="images/photo6.png" />
+        <img class="promoImg" src="images/photo (4).png" />
       </div>
     </div>
 
@@ -126,8 +137,7 @@
       <div class="adStack" id="rightAds">
         <img class="promoImg active" src="images/ad2.png" />
 
-        <img class="promoImg" src="images/photo9.png" />
-        <img class="promoImg" src="images/photo10.png" />
+        <img class="promoImg" src="images/FinalOT.png" />
       </div>
     </div>
 
@@ -135,6 +145,7 @@
     <div class="wall">
       <div class="mediaContainer" id="mediaContainer"></div>
     </div>
+    <div id="clock"></div>
 
     <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js'
@@ -256,8 +267,6 @@
 
       const adInterval = 90000000
 
-
-
       function startAdRotation(containerId) {
         const ads = document.querySelectorAll(`#${containerId} .promoImg`)
 
@@ -271,6 +280,15 @@
           ads[index].classList.add('active')
         }, adInterval)
       }
+      function updateClock() {
+        document.getElementById('clock').textContent =
+          new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+      }
+      updateClock()
+      setInterval(updateClock, 60000)
 
       startAdRotation('leftAds')
 
@@ -278,4 +296,3 @@
     </script>
   </body>
 </html>
-

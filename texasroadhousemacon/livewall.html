@@ -107,6 +107,16 @@
           transform: translateY(-100%);
         }
       }
+      #clock { 
+        position: fixed; 
+        top: 2px; right: 
+        4px; z-index: 999999; 
+        font-size: 18px; color: rgba(255,255,255,0.10); 
+        font-family: Arial, Helvetica, sans-serif;
+        user-select: none; 
+        pointer-events: none; 
+        background: transparent; 
+      }
     </style>
   </head>
 
@@ -133,6 +143,8 @@
     <div class="wall">
       <div class="mediaContainer" id="mediaContainer"></div>
     </div>
+    <div id="clock"></div>
+
 
     <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js'
@@ -268,6 +280,15 @@
           ads[index].classList.add('active')
         }, adInterval)
       }
+      function updateClock() { 
+        document.getElementById('clock').textContent = 
+        new Date().toLocaleTimeString([], { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        }) 
+      }
+      updateClock() 
+      setInterval(updateClock, 60000);
 
       startAdRotation('leftAds')
 

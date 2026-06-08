@@ -107,6 +107,18 @@
           transform: translateY(-100%);
         }
       }
+      #clock {
+        position: fixed;
+        top: 2px;
+        right: 4px;
+        z-index: 999999;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.1);
+        font-family: Arial, Helvetica, sans-serif;
+        user-select: none;
+        pointer-events: none;
+        background: transparent;
+      }
     </style>
   </head>
 
@@ -133,6 +145,7 @@
     <div class="wall">
       <div class="mediaContainer" id="mediaContainer"></div>
     </div>
+    <div id="clock"></div>
 
     <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js'
@@ -160,7 +173,6 @@
 
       /* 🔥 CHANGE THIS FOR EACH BUSINESS */
       const LIVEWALL_FOLDER = 'hustlemanent/livewall'
-
 
       const container = document.getElementById('mediaContainer')
 
@@ -190,7 +202,6 @@
         try {
           /* 🔥 CORRECT BUSINESS FOLDER */
           const listRef = ref(storage, LIVEWALL_FOLDER)
-
 
           const res = await listAll(listRef)
 
@@ -256,7 +267,6 @@
 
       const adInterval = 90000000
 
-
       function startAdRotation(containerId) {
         const ads = document.querySelectorAll(`#${containerId} .promoImg`)
 
@@ -270,6 +280,15 @@
           ads[index].classList.add('active')
         }, adInterval)
       }
+      function updateClock() {
+        document.getElementById('clock').textContent =
+          new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+      }
+      updateClock()
+      setInterval(updateClock, 60000)
 
       startAdRotation('leftAds')
 
