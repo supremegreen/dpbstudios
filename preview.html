@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
+
+    <!-- NEW -->
+    <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -106,11 +110,11 @@
   <body>
     <div id="filtersScreen">
 
-      <!-- NEW -->
+      <!-- UPDATED -->
       <div id="swipeHint">
-        <span class="arrow">←</span>
+        <span class="arrow">&larr;</span>
         <span>Swipe to Choose Filter</span>
-        <span class="arrow">→</span>
+        <span class="arrow">&rarr;</span>
       </div>
 
       <img id="filterPreview" />
@@ -154,8 +158,7 @@
         baseImage.onload = () => (ready = true)
       }
 
-      const filters = [
-        './images/besties.png', './images/school.png', './images/photo2.png', './images/photo4.png']
+      const filters = ['./images/besties.png','./images/school.png','./images/transparent.png']
 
       let index = 0
 
