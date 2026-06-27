@@ -44,6 +44,30 @@
         object-fit: contain;
       }
 
+      /* NEW */
+      #swipeHint {
+        position: absolute;
+        top: 52%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        color: white;
+        font-size: clamp(16px, 3vw, 22px);
+        font-weight: 400;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      #swipeHint .arrow {
+        font-size: clamp(20px, 4vw, 28px);
+        font-weight: 300;
+      }
+
       #applyFilter {
         position: absolute;
         top: 60%;
@@ -81,6 +105,14 @@
 
   <body>
     <div id="filtersScreen">
+
+      <!-- NEW -->
+      <div id="swipeHint">
+        <span class="arrow">←</span>
+        <span>Swipe to Choose Filter</span>
+        <span class="arrow">→</span>
+      </div>
+
       <img id="filterPreview" />
       <button id="applyFilter">Next</button>
     </div>
@@ -114,8 +146,7 @@
       const baseImage = new Image()
 
       let ready = false
-
-      const saved = localStorage.getItem('photo')
+            const saved = localStorage.getItem('photo')
 
       if (saved && saved.startsWith('data:image')) {
         baseImage.src = saved
@@ -123,7 +154,8 @@
         baseImage.onload = () => (ready = true)
       }
 
-      const filters = ['./images/school.png', './images/besties.png']
+      const filters = [
+        './images/besties.png', './images/school.png', './images/photo2.png', './images/photo4.png']
 
       let index = 0
 
@@ -198,8 +230,7 @@
           downloadBtn.style.display = 'block'
         }
       }
-
-      downloadBtn.onclick = async () => {
+            downloadBtn.onclick = async () => {
         try {
           const blob = await new Promise(resolve =>
             canvas.toBlob(resolve, 'image/png')
@@ -209,7 +240,7 @@
 
           const storageRef = ref(
             storage,
-            `brassrack/livewall/${fileName}`
+            `bestfriends/livewall/${fileName}`
           )
 
           await uploadBytes(storageRef, blob)
